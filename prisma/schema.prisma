@@ -124,7 +124,7 @@ model User {
   accounts         Account[]
   providerProfiles ProviderProfiles?
 
-  role   String? @default("USER")
+  role   String? @default("CUSTOMER")
   phone  String?
   status String? @default("ACTIVE")
 
