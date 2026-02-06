@@ -20,18 +20,18 @@ app.use(
 app.use(express.json());
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-app.use("/provider-profile", providerProfileRouters);
+app.use("/api/providers", providerProfileRouters);
 
-app.use("/categories", categoryRouter);
+app.use("/api/categories", categoryRouter);
 
-app.use("/meals", mealsRouter);
+app.use("/api/meals", mealsRouter);
 
-app.use("/orders", ordersRouters);
+app.use("/api/orders", ordersRouters);
 
-app.use("/reviews", reviewsRouter);
+app.use("/api/reviews", reviewsRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("FoodHub API is running ");
 });
 
 export default app;
