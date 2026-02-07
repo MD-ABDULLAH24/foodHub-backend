@@ -1,0 +1,8 @@
+model Categories {
+  id    String  @id @default(uuid())
+  name  String  @db.VarChar(255)
+  image String?
+  meals Meals[]
+
+  @@index([name])
+}

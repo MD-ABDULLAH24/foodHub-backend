@@ -1,0 +1,21 @@
+model Meals {
+    id          String   @id @default(uuid())
+    providerId  String
+    categoryId  String?
+    name        String   @db.VarChar(255)
+    description String?  @db.Text
+    price       Float
+    imageUrl    String?
+    createdAt   DateTime @default(now())
+
+    provider ProviderProfiles @relation(fields: [providerId], references: [id])
+    category Categories?      @relation(fields: [categoryId], references: [id])
+
+    orderItems OrderItems[]
+    reviews    Reviews[]
+
+    @@index([providerId])
+    @@index([categoryId])
+    @@index([price])
+    @@index([name])
+}

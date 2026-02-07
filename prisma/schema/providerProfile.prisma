@@ -1,0 +1,15 @@
+model ProviderProfiles {
+    id             String   @id @default(uuid())
+    userId         String   @unique
+    restaurantName String   @db.VarChar(255)
+    address        String
+    phone          String   @db.VarChar(20)
+    isOpen         Boolean  @default(true)
+    createdAt      DateTime @default(now())
+    meals          Meals[]
+
+    user User @relation(fields: [userId], references: [id])
+
+    @@index([restaurantName])
+    @@index([isOpen])
+}

@@ -1,0 +1,34 @@
+model Order {
+  id         String       @id @default(uuid())
+  userId     String
+  totalPrice Float
+  status     OrderStatus  @default(PLACED)
+  address    String       @db.Text
+  createdAt  DateTime     @default(now())
+  items      OrderItems[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+model OrderItems {
+  id       String @id @default(uuid())
+  orderId  String
+  mealId   String
+  quantity Int
+  price    Float
+
+  order Order @relation(fields: [orderId], references: [id])
+  meal  Meals @relation(fields: [mealId], references: [id])
+
+  @@index([orderId])
+  @@index([mealId])
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}

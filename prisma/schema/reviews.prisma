@@ -1,0 +1,15 @@
+model Reviews {
+  id         String   @id @default(uuid())
+  authUserId String
+  mealId     String
+  rating     Int
+  comment    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  meal Meals @relation(fields: [mealId], references: [id])
+
+  @@index([authUserId])
+  @@index([mealId])
+  @@index([rating])
+  @@index([createdAt])
+}
