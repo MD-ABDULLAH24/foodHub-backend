@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import ordersService from "./orders.service";
 import { OrderStatus } from "../../../generated/prisma/client";
 
-const createOrder = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id as string;
     const result = await ordersService.createOrder(userId, req.body);
@@ -12,14 +12,11 @@ const createOrder = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Something went wrong",
-    });
+    next(error)
   }
 };
 
-const getMyOrders = async (req: Request, res: Response) => {
+const getMyOrders = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id as string;
     const result = await ordersService.getMyOrders(userId);
@@ -29,16 +26,11 @@ const getMyOrders = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Something went wrong",
-    });
+    next(error)
   }
 };
 
-
-
-const updateOrderStatus = async (req: Request, res: Response) => {
+const updateOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body as { status: OrderStatus };
@@ -52,10 +44,7 @@ const updateOrderStatus = async (req: Request, res: Response) => {
       data: updatedOrder,
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Something went wrong",
-    });
+   next(error)
   }
 };
 

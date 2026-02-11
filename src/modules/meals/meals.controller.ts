@@ -11,7 +11,7 @@ const createMeal = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getAllMeals = async (req: Request, res: Response) => {
+const getAllMeals = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { search } = req.query;
     const searchString = typeof search === "string" ? search : undefined;
@@ -20,14 +20,11 @@ const getAllMeals = async (req: Request, res: Response) => {
     });
     res.status(200).json(result);
   } catch (error) {
-    res.status(400).json({
-      error: "Meals fetched failed",
-      message: error,
-    });
+    next(error)
   }
 };
 
-const getMealById = async (req: Request, res: Response) => {
+const getMealById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { mealId } = req.params;
     const result = await mealsService.getMealById(mealId as string);
@@ -43,22 +40,16 @@ const getMealById = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(400).json({
-      error: "Meals fetched failed",
-      message: error,
-    });
+   next(error)
   }
 };
 
-const getMyMeals = async (req: Request, res: Response) => {
+const getMyMeals = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await mealsService.getMyMeal(req.user?.id as string);
     res.status(200).json(result);
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error,
-    });
+    next(error)
   }
 };
 

@@ -7,6 +7,7 @@ import { reviewsRouter } from "./modules/reviews/reviews.routes";
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
 import { auth } from "./lib/auth";
+import GlobalErrorHandler from "./middlewhares/globalErrorHandler";
 
 const app: Application = express();
 
@@ -33,5 +34,7 @@ app.use("/api/reviews", reviewsRouter);
 app.get("/", (req, res) => {
   res.send("FoodHub API is running ");
 });
+
+app.use(GlobalErrorHandler)
 
 export default app;

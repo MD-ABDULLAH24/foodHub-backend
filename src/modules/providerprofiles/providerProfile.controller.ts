@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import providerProfileService from "./providerProfile.service";
 
-const createProviderProfile = async (req: Request, res: Response) => {
+const createProviderProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authUserId = req.user?.id;
 
@@ -22,14 +22,11 @@ const createProviderProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Provider Profile creation failed",
-    });
+    next(error)
   }
 };
 
-const getAllProvider = async (req: Request, res: Response) => {
+const getAllProvider = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { search } = req.query;
     const searchString = typeof search === "string" ? search : undefined;
@@ -38,14 +35,11 @@ const getAllProvider = async (req: Request, res: Response) => {
     });
     res.status(200).json(result);
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Provider Profile creation failed",
-    });
+  next(error)
   }
 };
 
-const getProviderById = async (req: Request, res: Response) => {
+const getProviderById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { providerId } = req.params;
     if (!providerId) {
@@ -56,14 +50,11 @@ const getProviderById = async (req: Request, res: Response) => {
     );
     res.status(200).json(result);
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "",
-    });
+    next(error)
   }
 };
 
-const getMyProvider = async (req: Request, res: Response) => {
+const getMyProvider = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user;
     if (!user) {
@@ -74,10 +65,7 @@ const getMyProvider = async (req: Request, res: Response) => {
     );
     res.status(200).json(result);
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: "Failed to fetch provider profile",
-    });
+   next(error)
   }
 };
 
