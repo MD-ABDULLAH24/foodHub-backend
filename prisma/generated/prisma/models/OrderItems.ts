@@ -453,14 +453,6 @@ export type OrderItemsUncheckedUpdateManyWithoutOrderNestedInput = {
   deleteMany?: Prisma.OrderItemsScalarWhereInput | Prisma.OrderItemsScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type OrderItemsCreateWithoutMealInput = {
   id?: string
   quantity: number
