@@ -9,6 +9,7 @@ import cors from "cors";
 import { auth } from "./lib/auth";
 import GlobalErrorHandler from "./middlewhares/globalErrorHandler";
 import { notFound } from "./middlewhares/notFound";
+import { cartRouter } from "./modules/cart/cart.routes";
 
 const app: Application = express();
 
@@ -31,6 +32,8 @@ app.use("/api/meals", mealsRouter);
 app.use("/api/orders", ordersRouters);
 
 app.use("/api/reviews", reviewsRouter);
+
+app.use("/api/cart", cartRouter)
 
 app.get("/", (req, res) => {
   res.send("FoodHub API is running ");

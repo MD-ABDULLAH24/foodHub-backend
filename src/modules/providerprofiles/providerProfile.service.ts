@@ -1,5 +1,5 @@
-import { ProviderProfiles } from "../../../generated/prisma/client";
-import { ProviderProfilesWhereInput } from "../../../generated/prisma/models";
+import { ProviderProfiles } from "../../../prisma/generated/prisma/client";
+import { ProviderProfilesWhereInput } from "../../../prisma/generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 const createProviderProfile = async (

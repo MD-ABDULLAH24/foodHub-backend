@@ -20,7 +20,7 @@ const getAllMeals = async (req: Request, res: Response, next: NextFunction) => {
     });
     res.status(200).json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -40,7 +40,7 @@ const getMealById = async (req: Request, res: Response, next: NextFunction) => {
       data: result,
     });
   } catch (error) {
-   next(error)
+    next(error);
   }
 };
 
@@ -49,7 +49,7 @@ const getMyMeals = async (req: Request, res: Response, next: NextFunction) => {
     const result = await mealsService.getMyMeal(req.user?.id as string);
     res.status(200).json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 

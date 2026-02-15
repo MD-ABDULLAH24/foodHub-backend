@@ -1,5 +1,5 @@
-import { Meals, Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../lib/prisma";
+import { Meals, Prisma } from "../../../prisma/generated/prisma/client";
+import  {prisma}  from "../../lib/prisma";
 
 type CreateMealInput = Omit<Meals, "id" | "createdAt" | "providerId">;
 
