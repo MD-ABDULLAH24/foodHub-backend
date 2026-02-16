@@ -21,9 +21,11 @@ app.use(
 );
 
 app.use(express.json());
-app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use("/api/providers", providerProfileRouters);
+
+app.all("/api/auth/*splat", toNodeHandler(auth));
+
 
 app.use("/api/categories", categoryRouter);
 
@@ -33,14 +35,14 @@ app.use("/api/orders", ordersRouters);
 
 app.use("/api/reviews", reviewsRouter);
 
-app.use("/api/cart", cartRouter)
+app.use("/api/cart", cartRouter);
 
 app.get("/", (req, res) => {
   res.send("FoodHub API is running ");
 });
 
-app.use(notFound)
+app.use(notFound);
 
-app.use(GlobalErrorHandler)
+app.use(GlobalErrorHandler);
 
 export default app;

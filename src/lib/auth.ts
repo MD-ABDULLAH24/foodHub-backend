@@ -17,21 +17,16 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
-  // trustedOrigins: [process.env.APP_URL!],
+  trustedOrigins: [process.env.APP_URL!],
   user: {
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: "USER",
+        defaultValue: "CUSTOMER",
         required: false,
       },
       phone: {
         type: "string",
-        required: false,
-      },
-      status: {
-        type: "string",
-        defaultValue: "ACTIVE",
         required: false,
       },
     },
@@ -100,6 +95,9 @@ export const auth = betterAuth({
         <p style="font-size: 12px; word-break: break-all; color: #999;">
           ${verificationUrl}
         </p>
+            <p class="link">
+          ${url}
+        </p>
       </div>
 
       <!-- Footer -->
@@ -110,16 +108,19 @@ export const auth = betterAuth({
   </div>
   `, // HTML version of the message
         });
+        console.log("Message sent:", info.messageId);
       } catch (error) {
         console.log(error);
         throw error;
       }
     },
   },
-     socialProviders: {
-        google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        }, 
+  socialProviders: {
+    google: {
+      prompt: "select_account consent",
+      accessType: "offline",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
+  },
 });

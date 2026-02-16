@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx watch src/server.ts"
+    "dev": "npx tsx watch src/server.ts",
+    "seed:admin": "npx tsx  src/scripts/seedAdmin.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,8 +16,10 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
+    "@types/node-fetch": "^2.6.13",
     "@types/nodemailer": "^7.0.9",
     "@types/pg": "^8.16.0",
+    "@types/uuid": "^10.0.0",
     "prisma": "^7.4.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
@@ -28,7 +31,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "node-fetch": "^2.7.0",
     "nodemailer": "^7.0.13",
-    "pg": "^8.17.2"
+    "pg": "^8.17.2",
+    "uuid": "^13.0.0"
   }
 }
