@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { OrderStatus } from "../../../generated/prisma/client";
+import { OrderStatus } from "../../../prisma/generated/prisma/client";
 
 type OrderItemInput = {
   mealId: string;

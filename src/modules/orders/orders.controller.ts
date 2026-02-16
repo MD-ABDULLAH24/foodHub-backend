@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ordersService from "./orders.service";
-import { OrderStatus } from "../../../generated/prisma/client";
+import { OrderStatus } from "../../../prisma/generated/prisma/client";
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {

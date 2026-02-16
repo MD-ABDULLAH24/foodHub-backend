@@ -10,6 +10,7 @@ import { auth } from "./lib/auth";
 import GlobalErrorHandler from "./middlewhares/globalErrorHandler";
 import { notFound } from "./middlewhares/notFound";
 import { cartRouter } from "./modules/cart/cart.routes";
+import { adminUsersRouter } from "./modules/admin/admin.routes";
 
 const app: Application = express();
 
@@ -36,6 +37,8 @@ app.use("/api/orders", ordersRouters);
 app.use("/api/reviews", reviewsRouter);
 
 app.use("/api/cart", cartRouter);
+
+app.use("/api/admin", adminUsersRouter)
 
 app.get("/", (req, res) => {
   res.send("FoodHub API is running ");
