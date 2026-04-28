@@ -1,12 +1,18 @@
-import express, { Router } from "express";
+import express from "express";
 import categoriesController from "./categories.controller";
-import auth, { UserRole } from "../../middlewhares/auth";
+import auth from "../../middlewhares/auth";
+import { Role } from "../../lib/enum";
 
 const router = express.Router();
 
-router.post("/", auth(UserRole.ADMIN), categoriesController.createCategory);
+// Create category (Admin only)
+router.post(
+  "/",
+  auth(Role.ADMIN),
+  categoriesController.createCategory
+);
 
+// Get all categories (public)
 router.get("/", categoriesController.getAllCategories);
 
-
-export const categoryRouter: Router = router;
+export const categoryRouter = router;

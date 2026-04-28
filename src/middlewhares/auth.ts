@@ -1,11 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { auth as betterAuth } from "../lib/auth";
-
-export enum UserRole {
-  CUSTOMER = "CUSTOMER",
-  PROVIDER = "PROVIDER",
-  ADMIN = "ADMIN",
-}
+import { Role, RoleType } from "../lib/enum"; 
 
 declare global {
   namespace Express {
@@ -14,48 +9,53 @@ declare global {
         id: string;
         email: string;
         name: string;
-        role: string;
+        role: RoleType;
         emailVerified: boolean;
       };
     }
   }
 }
 
-const auth = (...roles: UserRole[]) => {
+const auth = (...roles: RoleType[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      //? get user season
+      // get session
       const session = await betterAuth.api.getSession({
         headers: req.headers as any,
       });
 
-      if (!session) {
+      if (!session?.user) {
         return res.status(401).json({
           success: false,
           message: "You are not authorized",
         });
       }
-      if (!session?.user.emailVerified) {
+
+      if (!session.user.emailVerified) {
         return res.status(403).json({
           success: false,
           message: "Email verification required. Please verify your email!",
         });
       }
 
+      const userRole = session.user.role as RoleType;
+
       req.user = {
-        id: session?.user.id as string,
-        email: session?.user.email as string,
-        name: session?.user.name as string,
-        role: session?.user.role as string,
-        emailVerified: session?.user.emailVerified as boolean,
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        role: userRole,
+        emailVerified: session.user.emailVerified,
       };
-      if (roles.length && !roles.includes(req.user.role as UserRole)) {
+
+      // role check
+      if (roles.length && !roles.includes(userRole)) {
         return res.status(403).json({
           success: false,
-          message:
-            "Forbidden! You don't have permission to access this resources! ",
+          message: "Forbidden! You don't have permission to access this resource!",
         });
       }
+
       next();
     } catch (error) {
       next(error);

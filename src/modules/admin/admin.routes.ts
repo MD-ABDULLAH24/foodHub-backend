@@ -1,13 +1,28 @@
 import { Router } from "express";
-import auth, { UserRole } from "../../middlewhares/auth";
+import auth from "../../middlewhares/auth";
+import { Role } from "../../lib/enum";
+
 import adminUsersController from "./admin.controller";
-import adminController from "./admin.controller";
 
 const router = Router();
 
 // Only Admin can access
-router.get("/users", auth(UserRole.ADMIN), adminUsersController.getAllUsers);
-router.patch("/:userId/status", auth(UserRole.ADMIN), adminUsersController.updateUserStatus);
-router.get("/orders", auth(UserRole.ADMIN), adminController.getAllOrders);
+router.get(
+  "/users",
+  auth(Role.ADMIN),
+  adminUsersController.getAllUsers
+);
+
+router.patch(
+  "/:userId/status",
+  auth(Role.ADMIN),
+  adminUsersController.updateUserStatus
+);
+
+router.get(
+  "/orders",
+  auth(Role.ADMIN),
+  adminUsersController.getAllOrders
+);
 
 export const adminUsersRouter = router;

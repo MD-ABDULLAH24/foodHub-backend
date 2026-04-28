@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, // Use true for port 465, false for port 587
+  secure: false,
   auth: {
     user: process.env.APP_USER,
     pass: process.env.APP_PASS,
@@ -15,9 +15,11 @@ const transporter = nodemailer.createTransport({
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "postgresql", // or "mysql", "postgresql", ...etc
+    provider: "postgresql",
   }),
+
   trustedOrigins: [process.env.APP_URL!],
+
   user: {
     additionalFields: {
       role: {
@@ -31,90 +33,78 @@ export const auth = betterAuth({
       },
     },
   },
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
     requireEmailVerification: true,
   },
+
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({ user, url, token }, request) => {
+
+    sendVerificationEmail: async ({ user, token }) => {
       try {
+        // ✅ single clean verification link
         const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
-        const info = await transporter.sendMail({
-          from: '"FoodHub" <foodHub@gmail.com>',
+
+        await transporter.sendMail({
+          from: '"FoodHub 🍔" <foodhub@gmail.com>',
           to: user.email,
           subject: "Verify your FoodHub account",
-          text: `Hi ${user.name} || "There"`, // Plain-text version of the message
+
+          text: `Hi ${user.name || "there"}, verify your email: ${verificationUrl}`,
+
           html: `
-  <div style="font-family: Arial, Helvetica, sans-serif; background-color: #f6f8fa; padding: 40px 0;">
-    <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-      
-      <!-- Header -->
-      <div style="background-color: #ff6b35; padding: 20px; text-align: center;">
-        <h1 style="color: #ffffff; margin: 0;">FoodHub 🍔</h1>
-        <p style="color: #ffece4; margin: 5px 0 0;">Fresh food, fast delivery</p>
-      </div>
+            <div style="font-family: Arial; background:#f6f8fa; padding:40px 0;">
+              <div style="max-width:600px;margin:auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
 
-      <!-- Body -->
-      <div style="padding: 30px; color: #333333;">
-        <h2 style="margin-top: 0;">Verify your email address</h2>
+                <div style="background:#ff6b35;padding:20px;text-align:center;">
+                  <h1 style="color:#fff;margin:0;">FoodHub 🍔</h1>
+                  <p style="color:#ffece4;margin:5px 0;">Fresh food, fast delivery</p>
+                </div>
 
-        <p style="font-size: 15px; line-height: 1.6;">
-          Hi <strong>${user.name || "there"}</strong>,
-        </p>
+                <div style="padding:30px;color:#333;">
+                  <h2>Verify your email</h2>
 
-        <p style="font-size: 15px; line-height: 1.6;">
-          Thanks for joining <strong>FoodHub</strong>!  
-          Please confirm your email address by clicking the button below.
-        </p>
+                  <p>Hi <strong>${user.name || "there"}</strong>,</p>
 
-        <!-- Button -->
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="${verificationUrl}"
-             style="background-color: #ff6b35; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; display: inline-block;">
-            Verify Email
-          </a>
-        </div>
+                  <p>Thanks for joining FoodHub! Please verify your email address.</p>
 
-        <p style="font-size: 14px; color: #555;">
-          This verification link will expire soon for security reasons.
-        </p>
+                  <div style="text-align:center;margin:30px 0;">
+                    <a href="${verificationUrl}"
+                      style="background:#ff6b35;color:#fff;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:bold;">
+                      Verify Email
+                    </a>
+                  </div>
 
-        <p style="font-size: 14px; color: #555;">
-          If you didn’t create a FoodHub account, you can safely ignore this email.
-        </p>
+                  <p style="font-size:12px;color:#777;">
+                    If button not working, copy this link:
+                  </p>
 
-        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+                  <p style="font-size:12px;word-break:break-all;">
+                    ${verificationUrl}
+                  </p>
+                </div>
 
-        <p style="font-size: 13px; color: #999;">
-          Or copy and paste this link into your browser:
-        </p>
+                <div style="text-align:center;padding:15px;font-size:12px;color:#999;background:#fafafa;">
+                  © ${new Date().getFullYear()} FoodHub
+                </div>
 
-        <p style="font-size: 12px; word-break: break-all; color: #999;">
-          ${verificationUrl}
-        </p>
-            <p class="link">
-          ${url}
-        </p>
-      </div>
-
-      <!-- Footer -->
-      <div style="background-color: #fafafa; padding: 15px; text-align: center; font-size: 12px; color: #999;">
-        © ${new Date().getFullYear()} FoodHub. All rights reserved.
-      </div>
-    </div>
-  </div>
-  `, // HTML version of the message
+              </div>
+            </div>
+          `,
         });
-        console.log("Message sent:", info.messageId);
+
+        console.log("Verification email sent to:", user.email);
       } catch (error) {
-        console.log(error);
+        console.error("Email error:", error);
         throw error;
       }
     },
   },
+
   socialProviders: {
     google: {
       prompt: "select_account consent",

@@ -1,6 +1,7 @@
 import express, { Router } from "express";
-import auth, { UserRole } from "../../middlewhares/auth";
+import { Role } from "../../lib/enum";
 import mealsController from "./meals.controller";
+import auth from "../../middlewhares/auth";
 
 const router = express.Router();
 
@@ -10,13 +11,13 @@ router.get("/:mealId", mealsController.getMealById);
 
 router.get(
   "/provider/my-meals",
-  auth(UserRole.PROVIDER),
+  auth(Role.PROVIDER),
   mealsController.getMyMeals,
 );
 
-router.post("/", auth(UserRole.PROVIDER), mealsController.createMeal);
+router.post("/", auth(Role.PROVIDER), mealsController.createMeal);
 
-router.put("/:mealId", auth(UserRole.PROVIDER), mealsController.updateMeal);
+router.put("/:mealId", auth(Role.PROVIDER), mealsController.updateMeal);
 
-router.delete("/:mealId", auth(UserRole.PROVIDER), mealsController.deleteMeal);
+router.delete("/:mealId", auth(Role.PROVIDER), mealsController.deleteMeal);
 export const mealsRouter: Router = router;
